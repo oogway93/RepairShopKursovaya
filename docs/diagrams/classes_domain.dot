@@ -1,0 +1,28 @@
+digraph D {
+  rankdir=BT; fontname="DejaVu Sans"; dpi=170; nodesep=0.35; ranksep=0.55;
+  node [shape=plain, fontname="DejaVu Sans", fontsize=9];
+  edge [fontname="DejaVu Sans", fontsize=8, arrowsize=0.7];
+  User [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#EAF2FB"><tr><td border="1" sides="b"><b>User</b></td></tr><tr><td align="left">+Id: int<br align="left"/>+Login: string<br align="left"/>+FullName: string<br align="left"/>+PasswordHash: string<br align="left"/>+Salt: string<br align="left"/>+Role: UserRole<br align="left"/>+IsActive: bool<br align="left"/></td></tr></table>>];
+  Client [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#EAF2FB"><tr><td border="1" sides="b"><b>Client</b></td></tr><tr><td align="left">+Id: int<br align="left"/>+FullName: string<br align="left"/>+Phone: string<br align="left"/>+Email: string<br align="left"/></td></tr></table>>];
+  Device [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#EAF2FB"><tr><td border="1" sides="b"><b>Device</b></td></tr><tr><td align="left">+Id: int<br align="left"/>+ClientId: int<br align="left"/>+Type: DeviceType<br align="left"/>+Brand: string<br align="left"/>+Model: string<br align="left"/>+SerialNumber: string<br align="left"/></td></tr></table>>];
+  Order [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#FFF4DC"><tr><td border="1" sides="b"><b>RepairOrder</b></td></tr><tr><td align="left">+Id: int<br align="left"/>+Number: string<br align="left"/>+ClientId, DeviceId, MasterId: int<br align="left"/>+Defect: string<br align="left"/>+CreatedAt, DueDate: DateTime<br align="left"/>+ClosedAt: DateTime?<br align="left"/>+Status: OrderStatus<br align="left"/>+IsWarrantyCase: bool<br align="left"/>+FinalCost: decimal<br align="left"/></td></tr></table>>];
+  Work [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#EAF2FB"><tr><td border="1" sides="b"><b>OrderWork</b></td></tr><tr><td align="left">+ServiceId: int<br align="left"/>+Name: string<br align="left"/>+Price: decimal<br align="left"/>+Quantity: int<br align="left"/>+Total: decimal {readOnly}<br align="left"/></td></tr></table>>];
+  OPart [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#EAF2FB"><tr><td border="1" sides="b"><b>OrderPart</b></td></tr><tr><td align="left">+PartId: int<br align="left"/>+Name: string<br align="left"/>+Price: decimal<br align="left"/>+Quantity: int<br align="left"/>+Total: decimal {readOnly}<br align="left"/></td></tr></table>>];
+  Hist [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#EAF2FB"><tr><td border="1" sides="b"><b>StatusChange</b></td></tr><tr><td align="left">+Date: DateTime<br align="left"/>+Status: OrderStatus<br align="left"/>+UserId: int<br align="left"/>+Comment: string<br align="left"/></td></tr></table>>];
+  Svc [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#E8F5E9"><tr><td border="1" sides="b"><b>ServiceItem</b></td></tr><tr><td align="left">+Id: int<br align="left"/>+Name: string<br align="left"/>+Price: decimal<br align="left"/></td></tr></table>>];
+  Part [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#E8F5E9"><tr><td border="1" sides="b"><b>Part</b></td></tr><tr><td align="left">+Id: int<br align="left"/>+Article: string<br align="left"/>+Name: string<br align="left"/>+Quantity: int<br align="left"/>+Price: decimal<br align="left"/></td></tr></table>>];
+  Status [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#F3E5F5"><tr><td border="1" sides="b">«enumeration»<br/><b>OrderStatus</b></td></tr><tr><td align="left">Accepted<br align="left"/>Diagnostics<br align="left"/>WaitingParts<br align="left"/>InRepair<br align="left"/>Ready<br align="left"/>Issued<br align="left"/>Cancelled<br align="left"/></td></tr></table>>];
+
+  Order -> Client [label="1  принадлежит  *", arrowhead=none, headlabel="1", taillabel="*"];
+  Device -> Client [arrowhead=none, headlabel="1", taillabel="*"];
+  Order -> Device [arrowhead=none, headlabel="1", taillabel="*"];
+  Order -> User [arrowhead=none, label="мастер", headlabel="0..1", taillabel="*"];
+  Work -> Order [arrowhead=diamond, arrowtail=none, dir=forward, headlabel="1", taillabel="*"];
+  OPart -> Order [arrowhead=diamond, headlabel="1", taillabel="*"];
+  Hist -> Order [arrowhead=diamond, headlabel="1", taillabel="*"];
+  Work -> Svc [style=dashed, arrowhead=vee, label="копия цены"];
+  OPart -> Part [style=dashed, arrowhead=vee, label="списание"];
+  Order -> Status [style=dashed, arrowhead=vee];
+  {rank=same; Work; OPart; Hist}
+  {rank=same; Svc; Part; Status}
+}

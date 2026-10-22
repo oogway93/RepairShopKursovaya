@@ -1,0 +1,16 @@
+digraph AR {
+  rankdir=TB; fontname="DejaVu Sans"; dpi=170; nodesep=0.35; ranksep=0.5; compound=true;
+  node [fontname="DejaVu Sans", fontsize=10, shape=component, style=filled, fillcolor="#EAF2FB", color="#35618F"];
+  edge [fontname="DejaVu Sans", fontsize=8, arrowsize=0.7, style=dashed];
+  subgraph cluster_ui { label="Уровень представления — RepairShop.App (Windows Forms)"; style=rounded; color="#B5651D"; fontsize=10;
+    login [label="LoginForm"]; main [label="MainForm"]; details [label="OrderDetailsForm"]; create [label="OrderCreateForm"]; dlg [label="Dialogs"]; }
+  subgraph cluster_bl { label="Уровень бизнес-логики — RepairShop.Core"; style=rounded; color="#2E7D32"; fontsize=10;
+    sv [label="Services\n(Auth, Client, Catalog,\nOrder, Report)"]; logic [label="Logic\n(OrderWorkflow, CostCalculator,\nValidation)"]; }
+  subgraph cluster_da { label="Уровень данных — RepairShop.Core.Storage"; style=rounded; color="#6A1B9A"; fontsize=10;
+    db [label="ShopDatabase"]; ids [label="IDataStore"]; xml [label="XmlDataStore"]; }
+  file [shape=cylinder, label="data.xml", fillcolor="#FFF4DC", color="#B5651D"];
+  tests [label="RepairShop.Tests\n(40 тестов)", fillcolor="#FCE4EC", color="#B71C1C"];
+  login -> sv; main -> sv; details -> sv; create -> sv; dlg -> sv;
+  sv -> logic; sv -> db; db -> ids; xml -> ids [arrowhead=empty]; xml -> file;
+  tests -> sv [constraint=false];
+}

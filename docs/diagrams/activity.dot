@@ -1,0 +1,32 @@
+digraph A {
+  rankdir=TB; fontname="DejaVu Sans"; dpi=170; nodesep=0.35; ranksep=0.32;
+  node [fontname="DejaVu Sans", fontsize=9, shape=box, style="rounded,filled", fillcolor="#EAF2FB", color="#35618F"];
+  edge [fontname="DejaVu Sans", fontsize=8, arrowsize=0.7];
+  start [shape=circle, label="", width=0.22, style=filled, fillcolor=black];
+  end1 [shape=doublecircle, label="", width=0.2, style=filled, fillcolor=black];
+  end2 [shape=doublecircle, label="", width=0.2, style=filled, fillcolor=black];
+  a1 [label="Клиент приносит устройство"];
+  a2 [label="Найти или зарегистрировать клиента"];
+  a3 [label="Ввести данные устройства\nи описание неисправности"];
+  d1 [shape=diamond, style=filled, fillcolor="#FFF4DC", label="Гарантия\nдействует?"];
+  a4 [label="Пометить заказ\nкак гарантийный"];
+  a5 [label="Создать заказ (статус «Принят»)\nи распечатать акт приёма"];
+  a6 [label="Назначить мастера"];
+  a7 [label="Диагностика"];
+  d2 [shape=diamond, style=filled, fillcolor="#FFF4DC", label="Ремонт\nцелесообразен?"];
+  a8 [label="Отмена заказа:\nвозврат запчастей на склад,\nоплата диагностики", fillcolor="#FCE4EC", color="#B71C1C"];
+  d3 [shape=diamond, style=filled, fillcolor="#FFF4DC", label="Запчасть\nесть на складе?"];
+  a9 [label="Ожидание запчастей\n(пополнение склада)"];
+  a10 [label="Ремонт: добавление работ\nи списание запчастей"];
+  a11 [label="Статус «Готов к выдаче»\n(есть хотя бы одна работа)"];
+  a12 [label="Рассчитать стоимость\n(скидка, гарантия)"];
+  a13 [label="Выдать устройство клиенту,\nакт выполненных работ"];
+  start -> a1 -> a2 -> a3 -> d1;
+  d1 -> a4 [label="да"]; d1 -> a5 [label="нет"]; a4 -> a5;
+  a5 -> a6 -> a7 -> d2;
+  d2 -> a8 [label="нет"]; a8 -> end2;
+  d2 -> d3 [label="да"];
+  d3 -> a9 [label="нет"]; a9 -> d3;
+  d3 -> a10 [label="да"];
+  a10 -> a11 -> a12 -> a13 -> end1;
+}

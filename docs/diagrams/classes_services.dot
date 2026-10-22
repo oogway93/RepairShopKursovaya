@@ -1,0 +1,33 @@
+digraph S {
+  rankdir=TB; fontname="DejaVu Sans"; dpi=170; nodesep=0.3; ranksep=0.7;
+  node [shape=plain, fontname="DejaVu Sans", fontsize=9];
+  edge [fontname="DejaVu Sans", fontsize=8, arrowsize=0.7];
+  App [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#FFF4DC"><tr><td border="1" sides="b"><b>ShopApp</b></td></tr><tr><td align="left">+Db: ShopDatabase<br align="left"/>+Auth: AuthService<br align="left"/>+Clients: ClientService<br align="left"/>+Catalog: CatalogService<br align="left"/>+Orders: OrderService<br align="left"/>+Reports: ReportService<br align="left"/></td></tr></table>>];
+  Db [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#EAF2FB"><tr><td border="1" sides="b"><b>ShopDatabase</b></td></tr><tr><td align="left">+Data: ShopData<br align="left"/>+Clock: IClock<br align="left"/></td></tr><tr><td border="1" sides="t" align="left">+Save()<br align="left"/>+NextId(ids): int<br align="left"/></td></tr></table>>];
+  Store [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#F3E5F5"><tr><td border="1" sides="b">«interface»<br/><b>IDataStore</b></td></tr><tr><td align="left">+Load(): ShopData<br align="left"/>+Save(data)<br align="left"/></td></tr></table>>];
+  Xml [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#EAF2FB"><tr><td border="1" sides="b"><b>XmlDataStore</b></td></tr></table>>];
+  Mem [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#EAF2FB"><tr><td border="1" sides="b"><b>MemoryDataStore</b></td></tr></table>>];
+  Order [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#E8F5E9"><tr><td border="1" sides="b"><b>OrderService</b></td></tr><tr><td align="left">+CreateOrder(...): RepairOrder<br align="left"/>+ChangeStatus(id, status, comment)<br align="left"/>+AssignMaster(id, masterId)<br align="left"/>+AddWork / AddCustomWork / RemoveWork<br align="left"/>+AddPart / RemovePart<br align="left"/>+CalculateCost(order): CostBreakdown<br align="left"/>+Search(filter): List&lt;RepairOrder&gt;<br align="left"/>+FindWarrantyBase(serial, now)<br align="left"/></td></tr></table>>];
+  Client [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#E8F5E9"><tr><td border="1" sides="b"><b>ClientService</b></td></tr><tr><td align="left">+Add / Update / Delete<br align="left"/>+Search(text)<br align="left"/>+CompletedOrders(clientId): int<br align="left"/></td></tr></table>>];
+  Cat [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#E8F5E9"><tr><td border="1" sides="b"><b>CatalogService</b></td></tr><tr><td align="left">+AddService / UpdateService<br align="left"/>+AddPart / UpdatePart<br align="left"/>+Restock(id, qty)<br align="left"/>+LowStock(): List&lt;Part&gt;<br align="left"/></td></tr></table>>];
+  Auth [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#E8F5E9"><tr><td border="1" sides="b"><b>AuthService</b></td></tr><tr><td align="left">+Login(login, password): User<br align="left"/>+CreateUser(...)<br align="left"/>+ChangePassword(...)<br align="left"/>+SetActive(id, active)<br align="left"/></td></tr></table>>];
+  Rep [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#E8F5E9"><tr><td border="1" sides="b"><b>ReportService</b></td></tr><tr><td align="left">+Revenue(from, to): decimal<br align="left"/>+MasterStats(from, to)<br align="left"/>+BuildSummary(from, to): string<br align="left"/>+ToCsv(orders): string<br align="left"/>+BuildAcceptanceAct(order)<br align="left"/></td></tr></table>>];
+  Flow [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#FCE4EC"><tr><td border="1" sides="b">«static»<br/><b>OrderWorkflow</b></td></tr><tr><td align="left">+CanTransit(from, to): bool<br align="left"/>+NextStatuses(from)<br align="left"/>+IsEditable(status): bool<br align="left"/></td></tr></table>>];
+  Calc [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#FCE4EC"><tr><td border="1" sides="b">«static»<br/><b>CostCalculator</b></td></tr><tr><td align="left">+Calculate(order, completed): CostBreakdown<br align="left"/>+LoyaltyDiscountPercent(n): int<br align="left"/></td></tr></table>>];
+
+  App -> Db [arrowhead=odiamond, dir=back, arrowtail=diamond];
+  App -> Order; App -> Client; App -> Cat; App -> Auth; App -> Rep;
+  Order -> Db [style=dashed, arrowhead=vee, label="использует"];
+  Client -> Db [style=dashed, arrowhead=vee];
+  Cat -> Db [style=dashed, arrowhead=vee];
+  Auth -> Db [style=dashed, arrowhead=vee];
+  Rep -> Db [style=dashed, arrowhead=vee];
+  Db -> Store [arrowhead=vee, style=dashed];
+  Xml -> Store [arrowhead=empty, style=dashed];
+  Mem -> Store [arrowhead=empty, style=dashed];
+  Order -> Flow [style=dashed, arrowhead=vee];
+  Order -> Calc [style=dashed, arrowhead=vee];
+  {rank=same; Order; Client; Cat; Auth; Rep}
+  {rank=same; Flow; Calc; Db}
+  {rank=same; Xml; Mem; Store}
+}

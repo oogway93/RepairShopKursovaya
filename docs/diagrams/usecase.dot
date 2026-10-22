@@ -1,0 +1,39 @@
+digraph UC {
+  rankdir=LR; fontname="DejaVu Sans"; dpi=170; nodesep=0.28; ranksep=1.1; compound=true;
+  node [fontname="DejaVu Sans", fontsize=10];
+  edge [fontname="DejaVu Sans", fontsize=8, arrowsize=0.7];
+  master [shape=none, label="Мастер", image="actor.png", imagescale=true, width=1.5, height=1.0, labelloc=b, fixedsize=true, fontsize=11];
+  admin  [shape=none, label="Администратор", image="actor.png", imagescale=true, width=1.5, height=1.0, labelloc=b, fixedsize=true, fontsize=11];
+  subgraph cluster_sys {
+    label="Система «Ремонтная мастерская»"; style=rounded; color="#555555"; fontsize=11; fontname="DejaVu Sans";
+    node [shape=ellipse, style=filled, fillcolor="#EAF2FB", color="#35618F"];
+    login [label="Войти в систему"];
+    myorders [label="Просмотреть\nсвои заказы"];
+    status [label="Сменить статус\nзаказа"];
+    works [label="Добавить работы\nи запчасти"];
+    stockcheck [label="Проверить остаток\nна складе"];
+    view [label="Просмотреть склад\nи прайс-лист"];
+    accept [label="Оформить приём\nустройства"];
+    newclient [label="Зарегистрировать\nклиента"];
+    assign [label="Назначить мастера"];
+    issue [label="Выдать устройство\nклиенту"];
+    cost [label="Рассчитать\nстоимость"];
+    act [label="Распечатать акт"];
+    cancel [label="Отменить заказ"];
+    price [label="Управлять\nпрайс-листом"];
+    stock [label="Управлять складом"];
+    report [label="Сформировать\nотчёт"];
+    users [label="Управлять\nсотрудниками"];
+  }
+  master -> login [dir=none]; master -> myorders [dir=none]; master -> status [dir=none];
+  master -> works [dir=none]; master -> view [dir=none];
+  admin -> login [dir=none]; admin -> accept [dir=none]; admin -> assign [dir=none];
+  admin -> issue [dir=none]; admin -> cancel [dir=none]; admin -> price [dir=none];
+  admin -> stock [dir=none]; admin -> report [dir=none]; admin -> users [dir=none];
+  admin -> status [dir=none];
+  works -> stockcheck [style=dashed, label="«include»"];
+  issue -> cost [style=dashed, label="«include»"];
+  newclient -> accept [style=dashed, label="«extend»"];
+  act -> accept [style=dashed, label="«extend»"];
+  act -> issue [style=dashed, label="«extend»"];
+}

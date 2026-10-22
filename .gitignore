@@ -1,0 +1,6 @@
+nuget.config
+bin/
+obj/
+*.user
+.vs/
+*.tmp

@@ -1,0 +1,23 @@
+digraph ST {
+  rankdir=TB; fontname="DejaVu Sans"; dpi=170; nodesep=0.5; ranksep=0.55; newrank=true;
+  node [fontname="DejaVu Sans", fontsize=10, shape=box, style="rounded,filled", fillcolor="#EAF2FB", color="#35618F", width=1.3, height=0.55];
+  edge [fontname="DejaVu Sans", fontsize=8, arrowsize=0.7];
+  s0 [shape=circle, label="", width=0.2, style=filled, fillcolor=black];
+  Accepted [label="Принят"]; Diagnostics [label="Диагностика"]; Waiting [label="Ожидание\nзапчастей"];
+  Repair [label="В ремонте"]; Ready [label="Готов\nк выдаче", fillcolor="#E8F5E9", color="#2E7D32"];
+  Issued [label="Выдан", fillcolor="#E8F5E9", color="#2E7D32"];
+  Cancelled [label="Отменён", fillcolor="#FCE4EC", color="#B71C1C"];
+  e1 [shape=doublecircle, label="", width=0.18, style=filled, fillcolor=black];
+  e2 [shape=doublecircle, label="", width=0.18, style=filled, fillcolor=black];
+  s0 -> Accepted [label="создание"];
+  Accepted -> Diagnostics [label="назначен мастер"];
+  Diagnostics -> Waiting [label="нужны запчасти"];
+  Diagnostics -> Repair [label="приступить"];
+  Waiting -> Repair [label="запчасти получены"];
+  Repair -> Waiting [label="нужна\nещё запчасть"];
+  Repair -> Ready [label="есть работы"];
+  Ready -> Repair [label="возврат\nв ремонт"];
+  Ready -> Issued [label="выдача"];
+  Accepted -> Cancelled; Diagnostics -> Cancelled; Waiting -> Cancelled; Repair -> Cancelled;
+  Issued -> e1; Cancelled -> e2;
+}

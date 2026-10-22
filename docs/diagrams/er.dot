@@ -1,0 +1,21 @@
+digraph ER {
+  rankdir=LR; fontname="DejaVu Sans"; dpi=170; nodesep=0.45; ranksep=0.9; splines=true;
+  node [shape=plain, fontname="DejaVu Sans", fontsize=9];
+  edge [fontname="DejaVu Sans", fontsize=8, arrowhead=crow, arrowtail=tee, dir=both, arrowsize=0.7];
+  users [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3"><tr><td bgcolor="#35618F"><font color="white"><b>users</b></font></td></tr><tr><td align="left"><b>PK</b> id<br align="left"/>login<br align="left"/>full_name<br align="left"/>password_hash<br align="left"/>salt<br align="left"/>role<br align="left"/>is_active<br align="left"/></td></tr></table>>];
+  clients [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3"><tr><td bgcolor="#35618F"><font color="white"><b>clients</b></font></td></tr><tr><td align="left"><b>PK</b> id<br align="left"/>full_name<br align="left"/>phone<br align="left"/>email<br align="left"/></td></tr></table>>];
+  devices [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3"><tr><td bgcolor="#35618F"><font color="white"><b>devices</b></font></td></tr><tr><td align="left"><b>PK</b> id<br align="left"/><b>FK</b> client_id<br align="left"/>type<br align="left"/>brand<br align="left"/>model<br align="left"/>serial_number<br align="left"/></td></tr></table>>];
+  orders [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3"><tr><td bgcolor="#B5651D"><font color="white"><b>repair_orders</b></font></td></tr><tr><td align="left"><b>PK</b> id<br align="left"/>number<br align="left"/><b>FK</b> client_id<br align="left"/><b>FK</b> device_id<br align="left"/><b>FK</b> master_id<br align="left"/>defect<br align="left"/>created_at<br align="left"/>due_date<br align="left"/>closed_at<br align="left"/>status<br align="left"/>is_warranty_case<br align="left"/>final_cost<br align="left"/></td></tr></table>>];
+  works [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3"><tr><td bgcolor="#35618F"><font color="white"><b>order_works</b></font></td></tr><tr><td align="left"><b>FK</b> order_id<br align="left"/><b>FK</b> service_id<br align="left"/>name<br align="left"/>price<br align="left"/>quantity<br align="left"/></td></tr></table>>];
+  oparts [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3"><tr><td bgcolor="#35618F"><font color="white"><b>order_parts</b></font></td></tr><tr><td align="left"><b>FK</b> order_id<br align="left"/><b>FK</b> part_id<br align="left"/>name<br align="left"/>price<br align="left"/>quantity<br align="left"/></td></tr></table>>];
+  hist [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3"><tr><td bgcolor="#35618F"><font color="white"><b>status_history</b></font></td></tr><tr><td align="left"><b>FK</b> order_id<br align="left"/><b>FK</b> user_id<br align="left"/>date<br align="left"/>status<br align="left"/>comment<br align="left"/></td></tr></table>>];
+  services [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3"><tr><td bgcolor="#2E7D32"><font color="white"><b>services</b></font></td></tr><tr><td align="left"><b>PK</b> id<br align="left"/>name<br align="left"/>price<br align="left"/></td></tr></table>>];
+  parts [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3"><tr><td bgcolor="#2E7D32"><font color="white"><b>parts</b></font></td></tr><tr><td align="left"><b>PK</b> id<br align="left"/>article<br align="left"/>name<br align="left"/>quantity<br align="left"/>price<br align="left"/></td></tr></table>>];
+
+  clients -> devices [arrowtail=tee, arrowhead=crow];
+  clients -> orders;
+  devices -> orders;
+  users -> orders [label="мастер"];
+  orders -> works; orders -> oparts; orders -> hist;
+  services -> works; parts -> oparts; users -> hist;
+}
